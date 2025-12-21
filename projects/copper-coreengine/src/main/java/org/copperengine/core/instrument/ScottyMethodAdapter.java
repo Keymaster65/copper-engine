@@ -34,6 +34,7 @@ import org.objectweb.asm.Type;
 class ScottyMethodAdapter extends MethodVisitor implements Opcodes {
 
     public static final Set<String> waitMethods;
+    public static final int MAX_STACK_INCREMENT = 7;
 
     static {
         waitMethods = new HashSet<String>();
@@ -373,9 +374,12 @@ class ScottyMethodAdapter extends MethodVisitor implements Opcodes {
 
     @Override
     public void visitMaxs(int maxStack, int maxLocals) {
-        super.visitMaxs(maxStack + 7, maxLocals);
+        super.visitMaxs(maxStack + MAX_STACK_INCREMENT, maxLocals);
     }
 
+    /*
+     * Needs an MAX_STACK_INCREMENT of 7. Calculated with chatGPT.
+     */
     @Override
     public void visitEnd() {
         for (Bundle b : originalTryCatchBlocks) {
