@@ -16,14 +16,20 @@
 package org.copperengine.core.tranzient;
 
 import java.io.File;
+import java.time.Duration;
+import java.util.concurrent.locks.LockSupport;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class TransientScottyEngineTest {
+class TransientScottyEngineTest {
+
+    private static final Logger log = LoggerFactory.getLogger(TransientScottyEngineTest.class);
 
     @Test
-    public void testStartup() throws Exception {
+    void testStartup() throws Exception {
         TransientEngineFactory factory = new TransientEngineFactory() {
             @Override
             protected File getWorkflowSourceDirectory() {
@@ -35,6 +41,8 @@ public class TransientScottyEngineTest {
             Assertions.assertEquals("STARTED", engine.getState());
             engine.run("test.HelloWorldWorkflow", null);
         } finally {
+            log.info("Park to resubmit in workflow");
+            LockSupport.parkNanos(Duration.ofSeconds(3).toNanos());
             engine.shutdown();
         }
     }

@@ -25,6 +25,8 @@ public class HelloWorldWorkflow extends Workflow<Void> {
     @Override
     public void main() throws Interrupt {
         System.out.println("HelloWorld!");
+        resubmit();
+        System.out.println("HelloWorld! 2nd hello.");
     }
 
 }
