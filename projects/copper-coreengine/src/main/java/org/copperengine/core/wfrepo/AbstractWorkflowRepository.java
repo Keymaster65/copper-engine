@@ -238,14 +238,14 @@ public abstract class AbstractWorkflowRepository implements WorkflowRepository, 
 
                 // Recompute frames, etc.
                 ClassReader cr3 = new ClassReader(bytes);
-                ClassWriter cw3 = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+                ClassWriter cw3 = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
                 cr3.accept(cw3, ClassReader.SKIP_FRAMES);
                 bytes = cw3.toByteArray();
-                traceBytes(clazz.classname + " - after COMPUTE_FRAMES", bytes);
+                traceBytes(clazz.classname + " - after COMPUTE_FRAMES and COMPUTE_MAXS", bytes);
 
                 StringWriter sw = new StringWriter();
                 PrintWriter pw = new PrintWriter(sw);
-                CheckClassAdapter.verify(new ClassReader(cw.toByteArray()), tmpClassLoader, false, pw);
+                CheckClassAdapter.verify(new ClassReader(bytes), tmpClassLoader, false, pw);
                 if (sw.toString().length() != 0) {
                     logger.error("CheckClassAdapter.verify failed for class " + cn.name + ":\n" + sw.toString());
                 } else {

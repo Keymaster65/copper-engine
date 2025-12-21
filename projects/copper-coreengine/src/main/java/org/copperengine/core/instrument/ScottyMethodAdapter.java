@@ -34,7 +34,6 @@ import org.objectweb.asm.Type;
 class ScottyMethodAdapter extends MethodVisitor implements Opcodes {
 
     public static final Set<String> waitMethods;
-    public static final int MAX_STACK_INCREMENT = 7;
 
     static {
         waitMethods = new HashSet<String>();
@@ -370,11 +369,6 @@ class ScottyMethodAdapter extends MethodVisitor implements Opcodes {
         // COPPER has created its own try catch blocks. Otherwise COPPERs internal
         // stack construction/deconstruction may not work properly
         originalTryCatchBlocks.add(new Bundle(from, to, handler, exception));
-    }
-
-    @Override
-    public void visitMaxs(int maxStack, int maxLocals) {
-        super.visitMaxs(maxStack + MAX_STACK_INCREMENT, maxLocals);
     }
 
     /*
